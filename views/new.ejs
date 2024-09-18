@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Jobsheet</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        
+        .wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .header,
+        .footer {
+            background-color: #007BFF;
+            padding: 20px;
+            color: white;
+            text-align: center;
+            border-radius: 8px;
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        
+        .container {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 0 0 8px 8px;
+            background-color: #f9f9f9;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        input,
+        textarea,
+        select {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            width: 100%;
+        }
+        
+        button {
+            padding: 10px;
+            background-color: #FFA500;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        
+        button:hover {
+            background-color: #e69500;
+        }
+        
+        .back-button {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .back-button a {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .back-button a:hover {
+            background-color: #0056b3;
+        }
+        
+        .attachment-section {
+            margin-top: 20px;
+        }
+        
+        .attachment-section input[type="file"] {
+            display: block;
+            margin-bottom: 10px;
+        }
+        
+        .attachment-section button {
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .attachment-section button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="header">
+            <h1>Create New Jobsheet</h1>
+        </div>
+
+        <div class="container">
+            <form action="/new" method="POST" enctype="multipart/form-data">
+                <label for="clientId">Client ID</label>
+                <input type="text" name="clientId" id="clientId" placeholder="Enter client ID" required>
+
+                <label for="clientName">Client Name</label>
+                <input type="text" name="clientName" id="clientName" placeholder="Enter client name" required>
+
+                <label for="contactNumber">Contact Number</label>
+                <input type="text" name="contactNumber" id="contactNumber" placeholder="Enter contact number" required>
+
+                <label for="inventoryReceived">Inventory Received</label>
+                <input type="text" name="inventoryReceived" id="inventoryReceived" placeholder="Enter inventory details" required>
+
+                <label for="reportedIssue">Reported Issue</label>
+                <textarea name="reportedIssue" id="reportedIssue" rows="3" placeholder="Describe the issue" required></textarea>
+
+                <div class="attachment-section">
+                    <label for="attachment">Upload Inventory Attachment (PDF/Img/Video)</label>
+                    <input type="file" name="attachment" id="attachment" accept=".pdf, .jpg, .jpeg, .png, .mp4, .mov">
+                </div>
+
+                <label for="clientNote">Client Note</label>
+                <textarea name="clientNote" id="clientNote" rows="4" placeholder="Client notes"></textarea>
+
+                <label for="assignedTechnician">Assigned Technician</label>
+                <input type="text" name="assignedTechnician" id="assignedTechnician" placeholder="Enter technician name" required>
+
+                <label for="estimatedAmount">Estimated Amount</label>
+                <input type="number" name="estimatedAmount" id="estimatedAmount" placeholder="Enter estimated cost" required>
+
+                <label for="deadline">Deadline</label>
+                <input type="date" name="deadline" id="deadline" required>
+
+                <label for="status">Status</label>
+                <select name="status" id="status" required>
+                    <option value="Pending">Pending</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Completed">Completed</option>
+                </select>
+
+                <button type="submit">Create Jobsheet</button>
+            </form>
+
+            <div class="back-button">
+                <a href="/">Back to Home</a>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>This site created by Satyendra</p>
+        </div>
+    </div>
+</body>
+
+</html>

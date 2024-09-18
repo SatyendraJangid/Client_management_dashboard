@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Jobsheet</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        
+        .header {
+            background-color: #007BFF;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            border-radius: 8px;
+            margin: 0 auto 30px;
+            /* Center the header and add space at the bottom */
+            max-width: 800px;
+            /* Same max-width as the container */
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        input,
+        textarea,
+        select {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            width: 100%;
+        }
+        
+        button {
+            padding: 10px;
+            background-color: #FFA500;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        
+        button:hover {
+            background-color: #e69500;
+        }
+        
+        .back-button {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .back-button a {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        
+        .back-button a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>Edit Jobsheet</h1>
+    </div>
+
+    <div class="container">
+        <form action="/edit/<%= jobsheet._id %>" method="POST">
+            <label for="clientId">Client ID</label>
+            <input type="text" name="clientId" id="clientId" value="<%= jobsheet.clientId %>" required>
+
+            <label for="clientName">Client Name</label>
+            <input type="text" name="clientName" id="clientName" value="<%= jobsheet.clientName %>" required>
+
+            <label for="contactNumber">Contact Number</label>
+            <input type="text" name="contactNumber" id="contactNumber" value="<%= jobsheet.contactNumber %>" required>
+
+            <label for="inventoryReceived">Inventory Received</label>
+            <input type="text" name="inventoryReceived" id="inventoryReceived" value="<%= jobsheet.inventoryReceived %>" required>
+
+            <label for="reportedIssue">Reported Issue</label>
+            <textarea name="reportedIssue" id="reportedIssue" rows="3" required><%= jobsheet.reportedIssue %></textarea>
+
+            <label for="clientNote">Client Note</label>
+            <textarea name="clientNote" id="clientNote" rows="4"><%= jobsheet.clientNote %></textarea>
+
+            <label for="assignedTechnician">Assigned Technician</label>
+            <input type="text" name="assignedTechnician" id="assignedTechnician" value="<%= jobsheet.assignedTechnician %>" required>
+
+            <label for="estimatedAmount">Estimated Amount</label>
+            <input type="number" name="estimatedAmount" id="estimatedAmount" value="<%= jobsheet.estimatedAmount %>" required>
+
+            <label for="deadline">Deadline</label>
+            <input type="date" name="deadline" id="deadline" value="<%= jobsheet.deadline ? new Date(jobsheet.deadline).toISOString().split('T')[0] : '' %>" required>
+
+            <label for="status">Status</label>
+            <select name="status" id="status" required>
+                <option value="Pending" <%= jobsheet.status === 'Pending' ? 'selected' : '' %>>Pending</option>
+                <option value="In Progress" <%= jobsheet.status === 'In Progress' ? 'selected' : '' %>>In Progress</option>
+                <option value="Completed" <%= jobsheet.status === 'Completed' ? 'selected' : '' %>>Completed</option>
+            </select>
+
+            <button type="submit">Update Jobsheet</button>
+        </form>
+
+        <div class="back-button">
+            <a href="/view/<%= jobsheet._id %>">Cancel</a>
+        </div>
+    </div>
+
+</body>
+
+</html>

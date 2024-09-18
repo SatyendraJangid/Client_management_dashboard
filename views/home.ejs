@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jobsheet Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        .page-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            flex: 1;
+        }
+        
+        h1 {
+            text-align: center;
+            background-color: #007BFF;
+            color: white;
+            padding: 10px;
+            margin: 0;
+            border-radius: 8px;
+        }
+        
+        .search-box {
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .search-box input {
+            padding: 8px;
+            width: 60%;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .search-box button {
+            padding: 8px 12px;
+            font-size: 16px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .search-box button:hover {
+            background-color: #218838;
+        }
+        
+        .create-button {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .create-button a {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        
+        .create-button a:hover {
+            background-color: #0056b3;
+        }
+        
+        .jobsheet-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        
+        .jobsheet-table th,
+        .jobsheet-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        
+        .jobsheet-table th {
+            background-color: #007BFF;
+            color: white;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            /* Adds space between buttons */
+        }
+        
+        .action-buttons a,
+        .delete-button {
+            padding: 5px 10px;
+            border-radius: 3px;
+            text-decoration: none;
+            color: white;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .action-buttons a {
+            background-color: #007BFF;
+        }
+        
+        .action-buttons a:hover {
+            background-color: #0056b3;
+        }
+        
+        .edit-button {
+            background-color: #FFA500;
+            /* Light orange */
+        }
+        
+        .edit-button:hover {
+            background-color: #FF8C00;
+            /* Darker orange */
+        }
+        
+        .delete-button {
+            background-color: red;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .delete-button:hover {
+            background-color: darkred;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        // Function to handle delete using AJAX
+        async function deleteJobsheet(jobsheetId, rowElement) {
+            if (confirm('Are you sure you want to delete this jobsheet?')) {
+                try {
+                    const response = await fetch(`/delete/${jobsheetId}`, {
+                        method: 'DELETE'
+                    });
+                    const result = await response.json();
+                    if (response.status === 200) {
+                        // Remove the table row from the UI
+                        rowElement.remove();
+                        alert(result.message);
+                    } else {
+                        alert('Error: ' + result.message);
+                    }
+                } catch (error) {
+                    alert('Error deleting jobsheet');
+                    console.error('Error:', error);
+                }
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <div class="page-container">
+        <h1>Jobsheet Dashboard</h1>
+        <!-- Search Functionality -->
+        <div class="search-box">
+            <form action="/search" method="GET">
+                <input type="text" name="q" placeholder="Search jobs by client name or ID...">
+                <button type="submit">Search</button>
+            </form>
+        </div>
+        <!-- Create New Jobsheet Button -->
+        <div class="create-button">
+            <a href="/new">Create New Jobsheet</a>
+        </div>
+        <!-- Jobsheet List -->
+        <table class="jobsheet-table">
+            <thead>
+                <tr>
+                    <th>Client ID</th>
+                    <th>Name</th>
+                    <th>Contact No.</th>
+                    <th>Inventory Received</th>
+                    <th>Reported Issue</th>
+                    <th>Client Note</th>
+                    <th>Assigned Technician</th>
+                    <th>Estimated Amount</th>
+                    <th>Deadline</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (jobsheets.length > 0) { %>
+                    <% jobsheets.forEach(function(jobsheet) { %>
+                        <tr id="jobsheet-row-<%= jobsheet._id %>">
+                            <td>
+                                <%= jobsheet.clientId %>
+                            </td>
+                            <td>
+                                <%= jobsheet.clientName %>
+                            </td>
+                            <td>
+                                <%= jobsheet.contactNumber %>
+                            </td>
+                            <td>
+                                <%= jobsheet.inventoryReceived %>
+                            </td>
+                            <td>
+                                <%= jobsheet.reportedIssue %>
+                            </td>
+                            <td>
+                                <% if (jobsheet.clientNote) { %>
+                                    <%= jobsheet.clientNote.substring(0, 50) %>...
+                                        <% } else { %>
+                                            No notes available
+                                            <% } %>
+                            </td>
+                            <td>
+                                <%= jobsheet.assignedTechnician %>
+                            </td>
+                            <td>$
+                                <%= jobsheet.estimatedAmount %>
+                            </td>
+                            <td>
+                                <%= new Date(jobsheet.deadline).toLocaleDateString() %>
+                            </td>
+                            <td>
+                                <%= jobsheet.status %>
+                            </td>
+                            <td class="action-buttons">
+                                <a href="/view/<%= jobsheet._id %>">View</a>
+                                <a href="/edit/<%= jobsheet._id %>" class="edit-button">Edit</a>
+                                <button class="delete-button" onclick="deleteJobsheet('<%= jobsheet._id %>', document.getElementById('jobsheet-row-<%= jobsheet._id %>'))">
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                        <% }); %>
+                            <% } else { %>
+                                <tr>
+                                    <td colspan="11">No jobsheets found.</td>
+                                </tr>
+                                <% } %>
+            </tbody>
+        </table>
+        <footer>
+            This site created by Satyendra
+        </footer>
+    </div>
+</body>
+
+</html>

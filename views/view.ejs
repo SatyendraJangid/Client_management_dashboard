@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Jobsheet</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        .page-container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            flex: 1;
+        }
+        
+        h1 {
+            text-align: center;
+            background-color: #007BFF;
+            color: white;
+            padding: 10px;
+            margin: 0;
+            border-radius: 8px;
+        }
+        
+        .jobsheet-details {
+            margin: 20px 0;
+        }
+        
+        .jobsheet-details table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .jobsheet-details td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            background-color: #f9f9f9;
+            font-size: 16px;
+        }
+        
+        .jobsheet-details td:first-child {
+            font-weight: bold;
+            background-color: #007BFF;
+            color: white;
+        }
+        
+        .button-group {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .button-group a,
+        .button-group button {
+            margin: 5px;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: white;
+        }
+        
+        .button-group a {
+            background-color: #007BFF;
+        }
+        
+        .button-group a:hover {
+            background-color: #0056b3;
+        }
+        
+        .print-button {
+            background-color: #28a745;
+        }
+        
+        .print-button:hover {
+            background-color: #218838;
+        }
+        
+        .view-file-button:hover {
+            background-color: #3d9ee7;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .note-section {
+            margin: 20px 0;
+        }
+        
+        .note-section label {
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .note-section textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            resize: vertical;
+        }
+        
+        .save-note-btn {
+            background-color: #FFA500;
+            padding: 10px 20px;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .save-note-btn:hover {
+            background-color: #e69500;
+        }
+        
+        .message {
+            font-size: 14px;
+            color: green;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="page-container">
+
+        <h1>
+            View Jobsheet
+        </h1>
+
+        <div class="jobsheet-details">
+            <table>
+                <tr>
+                    <td>Client ID:</td>
+                    <td>
+                        <%= jobsheet.clientId %>
+                    </td>
+                </tr>
+                <tr>
+
+
+                    <tr>
+                        <td>Client Name:</td>
+                        <td>
+                            <%= jobsheet.clientName %>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td>Contact No.:</td>
+                        <td>
+                            <%= jobsheet.contactNumber %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Inventory Received:</td>
+                        <td>
+                            <%= jobsheet.inventoryReceived %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Reported Issue:</td>
+                        <td>
+                            <%= jobsheet.reportedIssue %>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Inventory (Img/PDF/Video):</td>
+                        <td>
+                            <% if (jobsheet.attachment) { %>
+                                <a href="/uploads/<%= jobsheet.attachment %>" class="view-file-button" target="_blank">View File</a>
+                                <% } else { %>
+                                    <span>No file uploaded</span>
+                                    <% } %>
+                        </td>
+                    </tr>
+
+
+
+                    <tr>
+                        <td>Client Note:</td>
+                        <td id="client-note">
+                            <%= jobsheet.clientNote || 'No notes available' %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Assigned Technician:</td>
+                        <td>
+                            <%= jobsheet.assignedTechnician %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Estimated Amount:</td>
+                        <td>$
+                            <%= jobsheet.estimatedAmount %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Deadline:</td>
+                        <td>
+                            <%= new Date(jobsheet.deadline).toLocaleDateString() %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Status:</td>
+                        <td>
+                            <%= jobsheet.status %>
+                        </td>
+                    </tr>
+
+            </table>
+        </div>
+
+        <div class="note-section">
+            <label for="note">Add or Update Note:</label>
+            <textarea id="note" placeholder="Write your note here..."></textarea>
+            <button class="save-note-btn" onclick="saveNote()">Save Note</button>
+            <div class="message" id="message"></div>
+        </div>
+
+        <div class="button-group">
+            <button class="print-button" onclick="window.print()">Print</button>
+            <a href="/edit/<%= jobsheet._id %>">Edit</a>
+            <a href="/">Back to Home</a>
+        </div>
+
+        <footer>
+            This site created by Satyendra
+        </footer>
+
+    </div>
+
+    <script>
+        function saveNote() {
+            const note = document.getElementById('note').value;
+            const messageDiv = document.getElementById('message');
+
+            if (note.trim() === "") {
+                messageDiv.innerHTML = "Note cannot be empty!";
+                messageDiv.style.color = "red";
+                return;
+            }
+
+            // Send a POST request to the server to save the note
+            fetch('/save-note', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        note
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('client-note').innerText = data.clientNote; // Update the displayed client note
+                        messageDiv.innerHTML = data.message; // Show success message
+                        messageDiv.style.color = "green";
+                    } else {
+                        messageDiv.innerHTML = data.message; // Show error message
+                        messageDiv.style.color = "red";
+                    }
+                })
+                .catch(error => {
+                    messageDiv.innerHTML = "Error saving the note.";
+                    messageDiv.style.color = "red";
+                });
+        }
+    </script>
+</body>
+
+</html>
